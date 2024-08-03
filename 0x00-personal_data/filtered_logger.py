@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Defines filter_datum function that returns an obfuscated log message
+Definition of filter_datum function that returns obfuscated log message
 """
 from typing import List
 import re
@@ -15,10 +15,10 @@ PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
 def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str) -> str:
     """
-    Returns obfuscated log message
+    This returns obfuscated log message
     Args:
-        fields (list): The list of strings indicating fields to obfuscate
-        redaction (str): What field will be obfuscated to
+        fields (list): List of strings indicating fields to obfuscate
+        redaction (str): Is what the field will be obfuscated to
         message (str): Log line to obfuscate
         separator (str): Character separating the fields
     """
@@ -29,7 +29,8 @@ def filter_datum(fields: List[str], redaction: str,
 
 
 class RedactingFormatter(logging.Formatter):
-    """Redacting Formatter class"""
+    """ Redacting Formatter class
+        """
 
     REDACTION = "***"
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
@@ -41,7 +42,7 @@ class RedactingFormatter(logging.Formatter):
 
     def format(self, record: logging.LogRecord) -> str:
         """
-        Redacts message of LogRecord instance
+        Redact message of LogRecord instance
         Args:
         record (logging.LogRecord): LogRecord instance containing message
         Return:
@@ -54,7 +55,9 @@ class RedactingFormatter(logging.Formatter):
 
 
 def get_logger() -> logging.Logger:
-    """Returns a logging.Logger object"""
+    """
+    This returns logging.Logger object
+    """
     logger = logging.getLogger("user_data")
     logger.setLevel(logging.INFO)
     logger.propagate = False
@@ -83,7 +86,9 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
 
 
 def main():
-    """The main entry point"""
+    """
+    The main entry point
+    """
     db = get_db()
     logger = get_logger()
     cursor = db.cursor()
