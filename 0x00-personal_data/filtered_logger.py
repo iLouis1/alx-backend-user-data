@@ -23,14 +23,14 @@ def filter_datum(fields: List[str], redaction: str,
         separator (str): Character separating the fields
     """
     for field in fields:
-        message = re.sub(re.escape(field)+'=.*?'+re.escape(separator),
+        message = re.sub(field+'=.*?'+separator,
                          field+'='+redaction+separator, message)
     return message
 
 
 class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class
-    """
+        """
 
     REDACTION = "***"
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
@@ -73,15 +73,11 @@ def get_logger() -> logging.Logger:
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """
-    This returns MySQLConnection object
     """
     user = os.getenv('PERSONAL_DATA_DB_USERNAME') or "root"
     passwd = os.getenv('PERSONAL_DATA_DB_PASSWORD') or ""
     host = os.getenv('PERSONAL_DATA_DB_HOST') or "localhost"
     db_name = os.getenv('PERSONAL_DATA_DB_NAME')
-    if not db_name:
-        raise ValueError("Database name is not set in the environment variables.")
-    
     conn = mysql.connector.connect(user=user,
                                    password=passwd,
                                    host=host,
@@ -99,7 +95,7 @@ def main():
     cursor.execute("SELECT * FROM users;")
     fields = cursor.column_names
     for row in cursor:
-        message = "".join(f"{k}={v}; " for k, v in zip(fields, row))
+        message = "".join("{}={}; ".format(k, v) for k, v in zip(fields, row))
         logger.info(message.strip())
     cursor.close()
     db.close()
@@ -107,4 +103,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
